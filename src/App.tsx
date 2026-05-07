@@ -23,7 +23,7 @@ const Logo = ({ className = "" }: { className?: string }) => (
   <div className={`flex items-center gap-3 ${className}`}>
     <div className="relative w-8 h-8 flex items-center justify-center">
       <img 
-        src="/src/logo.png" 
+        src="https://scontent.fcgy1-3.fna.fbcdn.net/v/t39.30808-6/529729905_122171635748582434_551899538446831950_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeGPV8HENh0GYOpVU36wad6KTquTRrVF0PpOq5NGtUXQ-ieGc4Kbkme6QxciJkkLxMwEVzLpFmlnz-uNVie6w5a-&_nc_ohc=U_xXgC-r1kQQ7kNvwFIWjHv&_nc_oc=AdrnG-sKjgIegja9CoxvF9Ex-IKzFwLx772ltWkMFFWKULuyKYL1ImozH1AHvbBd2Po&_nc_zt=23&_nc_ht=scontent.fcgy1-3.fna&_nc_gid=4CoW6A1Z12nk5oVlRDaW8A&_nc_ss=7a2a8&oh=00_Af7yECd_BMZHH3sQEUEenTK1Q8xjSW1_ygbdAuUydEzEng&oe=6A027C6A" 
         alt="RunnerUp Coffee Logo" 
         className="w-full h-full object-contain"
         referrerPolicy="no-referrer"
