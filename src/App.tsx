@@ -23,7 +23,7 @@ const Logo = ({ className = "" }: { className?: string }) => (
   <div className={`flex items-center gap-3 ${className}`}>
     <div className="relative w-8 h-8 flex items-center justify-center">
       <img 
-        src="/src/logo.jpg" 
+        src="https://raw.githubusercontent.com/joburtd/RunnerUP-Coffee/refs/heads/main/src/logo.jpg" 
         alt="RunnerUp Coffee Logo" 
         className="w-full h-full object-contain"
         referrerPolicy="no-referrer"
