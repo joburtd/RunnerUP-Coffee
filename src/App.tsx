@@ -153,7 +153,7 @@ export default function App() {
   return (
     <div className="relative overflow-hidden selection:bg-cream selection:text-navy">
       {/* 1. TOP BANNER */}
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {bannerVisible && (
           <motion.div 
             initial={{ y: -100 }} 
@@ -167,7 +167,7 @@ export default function App() {
             </button>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       {/* 1. STICKY NAV */}
       <nav 
