@@ -28,6 +28,7 @@ const Logo = ({ className = "" }: { className?: string }) => (
         className="w-full h-full object-contain"
         referrerPolicy="no-referrer"
       />
+      <div><span></span></div>
     </div>
   </div>
 );
