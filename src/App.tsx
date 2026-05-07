@@ -29,7 +29,6 @@ const Logo = ({ className = "" }: { className?: string }) => (
         referrerPolicy="no-referrer"
       />
     </div>
-    <span className="font-serif text-xl tracking-widest hidden sm:block">RunnerUp Coffee</span>
   </div>
 );
 
@@ -240,7 +239,7 @@ export default function App() {
             transition={{ duration: 1.2 }}
             className="text-xs font-medium uppercase tracking-[0.2em] mb-6 block text-cream/70"
           >
-            Specialty Coffee
+            RunnerUp Coffee
           </motion.span>
           
           <motion.h1 
