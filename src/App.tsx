@@ -23,7 +23,7 @@ const Logo = ({ className = "" }: { className?: string }) => (
   <div className={`flex items-center gap-3 ${className}`}>
     <div className="relative w-8 h-8 flex items-center justify-center">
       <img 
-        src="https://scontent.fcgy1-3.fna.fbcdn.net/v/t39.30808-6/529729905_122171635748582434_551899538446831950_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeGPV8HENh0GYOpVU36wad6KTquTRrVF0PpOq5NGtUXQ-ieGc4Kbkme6QxciJkkLxMwEVzLpFmlnz-uNVie6w5a-&_nc_ohc=U_xXgC-r1kQQ7kNvwFIWjHv&_nc_oc=AdrnG-sKjgIegja9CoxvF9Ex-IKzFwLx772ltWkMFFWKULuyKYL1ImozH1AHvbBd2Po&_nc_zt=23&_nc_ht=scontent.fcgy1-3.fna&_nc_gid=4CoW6A1Z12nk5oVlRDaW8A&_nc_ss=7a2a8&oh=00_Af7yECd_BMZHH3sQEUEenTK1Q8xjSW1_ygbdAuUydEzEng&oe=6A027C6A" 
+        src="/src/logo.png" 
         alt="RunnerUp Coffee Logo" 
         className="w-full h-full object-contain"
         referrerPolicy="no-referrer"
@@ -68,9 +68,49 @@ const FadeIn = ({ children, delay = 0 }: any) => (
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [cart, setCart] = useState<any[]>([]);
   const [navScrolled, setNavScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState('hot');
   const [bannerVisible, setBannerVisible] = useState(false);
+  const [orderComplete, setOrderComplete] = useState(false);
+
+  const addToCart = (item: any) => {
+    setCart(prev => {
+      const existing = prev.find(i => i.id === item.id);
+      if (existing) {
+        return prev.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i);
+      }
+      return [...prev, { ...item, quantity: 1 }];
+    });
+    setIsCartOpen(true);
+  };
+
+  const removeFromCart = (id: string) => {
+    setCart(prev => prev.filter(i => i.id !== id));
+  };
+
+  const updateQuantity = (id: string, delta: number) => {
+    setCart(prev => prev.map(i => {
+      if (i.id === id) {
+        const newQty = Math.max(1, i.quantity + delta);
+        return { ...i, quantity: newQty };
+      }
+      return i;
+    }));
+  };
+
+  const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  const checkout = () => {
+    setOrderComplete(true);
+    setCart([]);
+    setTimeout(() => {
+      setOrderComplete(false);
+      setIsCartOpen(false);
+    }, 3000);
+  };
 
   useEffect(() => {
     const handleScroll = () => setNavScrolled(window.scrollY > 50);
@@ -84,30 +124,30 @@ export default function App() {
     };
   }, []);
 
-  const menuItems = {
+  const menuItems: any = {
     hot: [
-      { name: "Espresso", price: "₱120", desc: "Double shot, extracted at 9 bar pressure" },
-      { name: "Cortado", price: "₱150", desc: "Equal parts espresso and warm milk" },
-      { name: "Flat White", price: "₱180", desc: "Ristretto shots with velvety microfoam" },
-      { name: "Pour Over (V60)", price: "₱220", desc: "Single origin, brewed to order, 4 min steep" },
-      { name: "Chemex", price: "₱240", desc: "Clean, bright cup — 6-cup batch brew" },
-      { name: "Latte", price: "₱170", desc: "Espresso, steamed milk, light foam" },
+      { id: 'h1', name: "Espresso", price: 120, desc: "Double shot, extracted at 9 bar pressure" },
+      { id: 'h2', name: "Cortado", price: 150, desc: "Equal parts espresso and warm milk" },
+      { id: 'h3', name: "Flat White", price: 180, desc: "Ristretto shots with velvety microfoam" },
+      { id: 'h4', name: "Pour Over (V60)", price: 220, desc: "Single origin, brewed to order, 4 min steep" },
+      { id: 'h5', name: "Chemex", price: 240, desc: "Clean, bright cup — 6-cup batch brew" },
+      { id: 'h6', name: "Latte", price: 170, desc: "Espresso, steamed milk, light foam" },
     ],
     cold: [
-      { name: "Cold Brew", price: "₱180", desc: "18-hour steep, smooth and low-acid" },
-      { name: "Iced Latte", price: "₱175", desc: "Espresso over ice with fresh cold milk" },
-      { name: "Nitro Cold Brew", price: "₱200", desc: "Cold brew on nitrogen tap, creamy finish" },
-      { name: "Iced Pour Over", price: "₱220", desc: "Flash-brewed V60 over ice" },
+      { id: 'c1', name: "Cold Brew", price: 180, desc: "18-hour steep, smooth and low-acid" },
+      { id: 'c2', name: "Iced Latte", price: 175, desc: "Espresso over ice with fresh cold milk" },
+      { id: 'c3', name: "Nitro Cold Brew", price: 200, desc: "Cold brew on nitrogen tap, creamy finish" },
+      { id: 'c4', name: "Iced Pour Over", price: 220, desc: "Flash-brewed V60 over ice" },
     ],
     filter: [
-      { name: "Weekly Single Origin", price: "₱190", desc: "Ask our barista for today's featured origin" },
-      { name: "Batch Brew", price: "₱120", desc: "Our house filter, always fresh" },
-      { name: "AeroPress", price: "₱200", desc: "Full immersion, rich and complex" },
+      { id: 'f1', name: "Weekly Single Origin", price: 190, desc: "Ask our barista for today's featured origin" },
+      { id: 'f2', name: "Batch Brew", price: 120, desc: "Our house filter, always fresh" },
+      { id: 'f3', name: "AeroPress", price: 200, desc: "Full immersion, rich and complex" },
     ],
     food: [
-      { name: "Banana Walnut Loaf", price: "₱95", desc: "Baked in-house, pairs with any filter coffee" },
-      { name: "Dark Chocolate Brownie", price: "₱110", desc: "Dense, fudgy, 70% dark chocolate" },
-      { name: "Cheese Croissant", price: "₱130", desc: "Buttery, flaky, baked fresh daily" },
+      { id: 'ff1', name: "Banana Walnut Loaf", price: 95, desc: "Baked in-house, pairs with any filter coffee" },
+      { id: 'ff2', name: "Dark Chocolate Brownie", price: 110, desc: "Dense, fudgy, 70% dark chocolate" },
+      { id: 'ff3', name: "Cheese Croissant", price: 130, desc: "Buttery, flaky, baked fresh daily" },
     ]
   };
 
@@ -140,7 +180,7 @@ export default function App() {
           <a href="#hero" className="z-50"><Logo /></a>
           
           <div className="hidden md:flex items-center gap-8">
-            {['Our Story', 'Menu', 'Brew Guides', 'Wholesale', 'Find Us'].map((item) => (
+            {['Our Story', 'Menu', 'Brew Guides', 'Find Us'].map((item) => (
               <a 
                 key={item} 
                 href={`#${item.toLowerCase().replace(' ', '-')}`} 
@@ -149,7 +189,13 @@ export default function App() {
                 {item}
               </a>
             ))}
-            <Button className="px-6 py-2.5 text-xs">Shop</Button>
+            <button 
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2 hover:bg-cream/10 transition-colors border border-cream/20 sharp-corners flex items-center gap-2 group"
+            >
+              <ShoppingBag size={16} />
+              <span className="text-[10px] bg-cream text-navy px-1.5 py-0.5 font-bold">{cartCount}</span>
+            </button>
           </div>
 
           <button className="md:hidden z-50 p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -351,15 +397,21 @@ export default function App() {
               className="grid md:grid-cols-2 gap-x-16 gap-y-10"
             >
               {(menuItems as any)[activeTab].map((item: any, idx: number) => (
-                <div key={idx} className="group cursor-default py-2 border-l-0 hover:border-l-4 hover:border-cream hover:pl-6 transition-all duration-300">
+                <div key={idx} className="group cursor-default py-4 border-l-0 hover:border-l-4 hover:border-cream hover:pl-6 transition-all duration-300 bg-navy/20 p-4 border border-cream/5">
                   <div className="flex justify-between items-baseline mb-1">
                     <h4 className="font-serif text-xl font-bold group-hover:text-cream-light">{item.name}</h4>
-                    <span className="text-cream/80 font-medium">{item.price}</span>
+                    <span className="text-cream/80 font-medium">₱{item.price}</span>
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="flex-grow h-px bg-cream/10 group-hover:bg-cream/30"></div>
                   </div>
-                  <p className="text-xs text-cream/40 mt-2 uppercase tracking-wide">{item.desc}</p>
+                  <p className="text-xs text-cream/40 mt-2 uppercase tracking-wide mb-4">{item.desc}</p>
+                  <button 
+                    onClick={() => addToCart(item)}
+                    className="w-full py-2 bg-transparent border border-cream/20 text-[10px] uppercase tracking-[0.2em] hover:bg-cream hover:text-navy transition-all duration-300 font-bold"
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               ))}
             </motion.div>
@@ -465,50 +517,38 @@ export default function App() {
         </div>
       </section>
 
-      {/* 8. WHOLESALE */}
-      <section id="wholesale" className="py-24 bg-navy px-6">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-20">
-          <FadeIn>
-            <h2 className="text-4xl md:text-6xl font-serif mb-8 leading-tight">Bring RunnerUp Coffee to Your Café, Office, or Hotel.</h2>
-            <p className="text-lg text-cream/70 font-light mb-10 max-w-lg">We supply freshly roasted single-origin beans and blends to businesses across the Philippines. White-label options available.</p>
-            
-            <ul className="space-y-4 mb-10">
-              {["Weekly fresh roast delivery", "Barista training included", "Custom packaging available"].map(b => (
-                <li key={b} className="flex items-center gap-3 text-sm text-cream font-medium tracking-wide">
-                  <Check size={16} className="text-cream" /> {b}
-                </li>
-              ))}
-            </ul>
+      {/* 8. SHOP (BEANS) REDESIGNED AS PRODUCTS */}
+      <section id="shop" className="py-24 bg-navy px-6">
+        <div className="max-w-7xl mx-auto">
+          <SectionHeading eyebrow="Take It Home" title="Shop Fresh Roasted Beans" />
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { id: 'b1', name: "Ethiopia Yirgacheffe", price: 580, wt: "250g", notes: ["Blueberry", "Jasmine", "Bright Citrus"], process: "Washed" },
+              { id: 'b2', name: "Colombia Huila", price: 540, wt: "250g", notes: ["Caramel", "Red Apple", "Smooth"], process: "Natural" },
+              { id: 'b3', name: "House Blend", price: 490, wt: "250g", notes: ["Chocolate", "Nuts", "Balanced"], process: "Mixed" }
+            ].map((prod, i) => (
+              <FadeIn key={i} delay={i * 0.1}>
+                <div className="border border-cream/10 p-10 flex flex-col h-full bg-navy/50 hover:bg-navy-dark transition-all duration-500 group">
+                  <div className="flex justify-between items-start mb-8">
+                    <span className="text-[10px] p-2 border border-cream/20 opacity-40 uppercase tracking-widest">{prod.wt}</span>
+                    <span className="font-serif text-xl">₱{prod.price}</span>
+                  </div>
+                  
+                  <h3 className="font-serif text-3xl font-bold mb-2 group-hover:text-cream-light transition-colors">{prod.name}</h3>
+                  <p className="text-xs text-cream/40 uppercase tracking-widest mb-8">{prod.process} Process</p>
 
-            <Button>Request Wholesale Info</Button>
-          </FadeIn>
+                  <div className="flex flex-wrap gap-2 mb-10">
+                    {prod.notes.map(note => (
+                      <span key={note} className="text-[10px] uppercase border border-cream/20 px-2 py-1 tracking-widest">{note}</span>
+                    ))}
+                  </div>
 
-          <FadeIn delay={0.2}>
-            <div className="border border-cream/10 p-10 bg-navy-dark">
-              <h3 className="font-serif text-2xl mb-8">Inquiry Form</h3>
-              <form className="space-y-6">
-                <div>
-                  <input type="text" placeholder="BUSINESS NAME" className="w-full bg-navy border border-cream/20 p-4 text-xs tracking-widest uppercase focus:border-cream outline-none sharp-corners" />
+                  <Button className="w-full mt-auto" onClick={() => addToCart(prod)}>Add To Cart</Button>
                 </div>
-                <div>
-                  <input type="text" placeholder="CONTACT PERSON" className="w-full bg-navy border border-cream/20 p-4 text-xs tracking-widest uppercase focus:border-cream outline-none sharp-corners" />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <input type="email" placeholder="EMAIL" className="w-full bg-navy border border-cream/20 p-4 text-xs tracking-widest uppercase focus:border-cream outline-none sharp-corners" />
-                  <input type="tel" placeholder="PHONE" className="w-full bg-navy border border-cream/20 p-4 text-xs tracking-widest uppercase focus:border-cream outline-none sharp-corners" />
-                </div>
-                <div>
-                  <select className="w-full bg-navy border border-cream/20 p-4 text-xs tracking-widest uppercase focus:border-cream outline-none appearance-none sharp-corners text-cream/50">
-                    <option>MONTHLY VOLUME</option>
-                    <option>UNDER 5KG</option>
-                    <option>5–20KG</option>
-                    <option>20KG+</option>
-                  </select>
-                </div>
-                <Button className="w-full">Send Inquiry</Button>
-              </form>
-            </div>
-          </FadeIn>
+              </FadeIn>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -711,15 +751,125 @@ export default function App() {
         </div>
       </footer>
 
-      {/* FLOATING CTA */}
+      {/* CART DRAWER */}
+      <AnimatePresence>
+        {isCartOpen && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsCartOpen(false)}
+              className="fixed inset-0 bg-navy/80 backdrop-blur-sm z-[70]"
+            />
+            <motion.div 
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'tween', duration: 0.4 }}
+              className="fixed right-0 top-0 h-full w-full max-w-md bg-navy-dark z-[80] shadow-2xl border-l border-cream/20 flex flex-col"
+            >
+              <div className="p-8 border-b border-cream/10 flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <ShoppingBag className="text-cream" />
+                  <h2 className="font-serif text-2xl tracking-tight">Your Order</h2>
+                </div>
+                <button onClick={() => setIsCartOpen(false)} className="p-2 hover:bg-white/5 transition-colors">
+                  <X />
+                </button>
+              </div>
+
+              <div className="flex-grow overflow-y-auto p-8">
+                {orderComplete ? (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="h-full flex flex-col items-center justify-center text-center px-6"
+                  >
+                    <div className="w-20 h-20 bg-cream flex items-center justify-center mb-6">
+                      <Check size={40} className="text-navy" />
+                    </div>
+                    <h3 className="font-serif text-3xl mb-4 italic">Thank You!</h3>
+                    <p className="text-cream/50 text-sm tracking-wide leading-relaxed uppercase">
+                      Your order has been received. We are brewing with intention.
+                    </p>
+                  </motion.div>
+                ) : cart.length === 0 ? (
+                  <div className="h-full flex flex-col items-center justify-center text-center opacity-30">
+                    <ShoppingBag size={48} className="mb-4" />
+                    <p className="uppercase tracking-[0.2em] text-xs">Your bag is empty</p>
+                  </div>
+                ) : (
+                  <div className="space-y-8">
+                    {cart.map((item) => (
+                      <div key={item.id} className="flex gap-6 group">
+                        <div className="w-16 h-16 bg-navy border border-cream/10 flex items-center justify-center font-serif text-2xl shrink-0 group-hover:border-cream/40 transition-colors">
+                          {item.name[0]}
+                        </div>
+                        <div className="flex-grow">
+                          <div className="flex justify-between mb-1">
+                            <h4 className="font-serif font-bold text-lg tracking-tight">{item.name}</h4>
+                            <p className="font-medium text-cream/70">₱{item.price * item.quantity}</p>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center border border-cream/10">
+                              <button 
+                                onClick={() => updateQuantity(item.id, -1)}
+                                className="px-3 py-1 hover:bg-cream/5 transition-colors text-xs"
+                              >
+                                -
+                              </button>
+                              <span className="px-4 py-1 text-xs border-x border-cream/10 min-w-8 text-center">{item.quantity}</span>
+                              <button 
+                                onClick={() => updateQuantity(item.id, 1)}
+                                className="px-3 py-1 hover:bg-cream/5 transition-colors text-xs"
+                              >
+                                +
+                              </button>
+                            </div>
+                            <button 
+                              onClick={() => removeFromCart(item.id)}
+                              className="text-[10px] uppercase tracking-widest text-cream/30 hover:text-cream transition-colors"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {!orderComplete && cart.length > 0 && (
+                <div className="p-8 border-t border-cream/10 bg-navy">
+                  <div className="flex justify-between items-end mb-8">
+                    <span className="uppercase tracking-[0.3em] text-xs opacity-50">Subtotal</span>
+                    <span className="font-serif text-3xl font-bold italic">₱{cartTotal}</span>
+                  </div>
+                  <Button className="w-full" onClick={checkout}>Confirm Order</Button>
+                  <p className="mt-4 text-[10px] text-center text-cream/30 uppercase tracking-widest">
+                    Standard pickup time: 15-20 minutes
+                  </p>
+                </div>
+              )}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* FLOATING CTA MOVED TO CART BUTTON OR REMOVED FOR CLEANER UI */}
       <motion.div 
         initial={{ y: 100 }}
-        animate={{ y: 0 }}
+        animate={{ y: cartCount > 0 && !isCartOpen ? 0 : 100 }}
         className="fixed bottom-10 right-10 z-[60]"
       >
-        <button className="bg-cream text-navy px-8 py-4 font-bold uppercase tracking-widest text-xs shadow-2xl hover:bg-navy hover:text-cream transition-colors border border-navy flex items-center gap-3 group sharp-corners">
+        <button 
+          onClick={() => setIsCartOpen(true)}
+          className="bg-cream text-navy px-8 py-4 font-bold uppercase tracking-widest text-xs shadow-2xl hover:scale-105 transition-all border border-navy flex items-center gap-3 group sharp-corners"
+        >
           <ShoppingBag size={18} className="group-hover:rotate-12 transition-transform" />
-          <span>Order Online</span>
+          <span>View Bag ({cartCount})</span>
         </button>
       </motion.div>
     </div>
