@@ -267,8 +267,12 @@ export default function App() {
             transition={{ delay: 0.8, duration: 0.8 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
+            <a href="https://joburtd.github.io/RunnerUP-Coffee/#menu"
             <Button>Explore Our Menu</Button>
+          </a>
+          <a href="https://joburtd.github.io/RunnerUP-Coffee/#our-story"
             <Button variant="outline">Our Brew Story</Button>
+        </a>
           </motion.div>
 
           <motion.div 
