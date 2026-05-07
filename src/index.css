@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Georgia&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Helvetica Neue", "Arial", sans-serif;
+  --font-serif: "Georgia", serif;
+  
+  --color-navy: #0C1929;
+  --color-navy-dark: #080F18;
+  --color-cream: #E8D5A3;
+  --color-cream-light: #F5EDD6;
+}
+
+@layer base {
+  body {
+    @apply bg-navy text-cream font-sans antialiased selection:bg-cream selection:text-navy relative min-h-screen;
+    background-image: radial-gradient(rgba(232, 213, 163, 0.05) 1px, transparent 0);
+    background-size: 24px 24px;
+  }
+}
+
+@layer utilities {
+  .sharp-corners {
+    border-radius: 0 !important;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee 40s linear infinite;
+}
+
+/* Custom scrollbar for premium feel */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0C1929;
+}
+::-webkit-scrollbar-thumb {
+  background: #E8D5A3;
+}
