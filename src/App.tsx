@@ -21,9 +21,13 @@ import {
 
 const Logo = ({ className = "" }: { className?: string }) => (
   <div className={`flex items-center gap-3 ${className}`}>
-    <div className="relative w-8 h-8 border-[1.5px] border-cream flex items-center justify-center font-serif font-bold text-sm">
-      RC
-      <div className="absolute -right-2 top-1 w-[10px] h-[12px] border-[1.5px] border-cream border-l-0 rounded-r-sm"></div>
+    <div className="relative w-8 h-8 flex items-center justify-center">
+      <img 
+        src="/src/logo.png" 
+        alt="RunnerUp Coffee Logo" 
+        className="w-full h-full object-contain"
+        referrerPolicy="no-referrer"
+      />
     </div>
     <span className="font-serif text-xl tracking-widest hidden sm:block">RunnerUp Coffee</span>
   </div>
